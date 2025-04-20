@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Simulation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="loading">Loading p5.js...</div>
+    
+    <div id="controls">
+        <h1>Traffic Simulation</h1>
+        <button id="startButton">Start Simulation</button>
+        <!-- <button id="resetButton">Reset Simulation</button>
+        <div class="control-group">
+            <label for="framerate">Simulation Speed: <span id="framerateValue">1x (60 FPS)</span></label>
+            <input type="range" id="framerate" min="0" value="1" step="1">
+        </div>
+        <div class="control-group">
+            <label for="trafficDensity">Traffic Density:</label>
+            <input type="range" id="trafficDensity" min="0" max="100" value="50">
+        </div>
+        <div class="control-group">
+            <label for="speedLimit">Speed Limit:</label>
+            <input type="range" id="speedLimit" min="0" max="100" value="50">
+        </div> -->
+    </div>
+
+    <script>
+        // Check if p5.js is loaded
+        window.onload = function() {
+            if (typeof p5 === 'undefined') {
+                document.getElementById('loading').innerHTML = 'Error: p5.js failed to load!';
+            } else {
+                document.getElementById('loading').style.display = 'none';
+            }
+        };
+    </script>
+    <script src="simulation.js"></script>
+    <script src="ui.js"></script>
+    <script src="sketch.js"></script>
+</body>
+</html>
