@@ -1,23 +1,22 @@
 # Traffic Simulation
 
-A simple 2D traffic simulation built with p5.js.
+A 2D traffic simulation built with p5.js, featuring a modular architecture and interactive controls.
+
+## Project Structure
+
+- `index.html` - Main HTML file with UI controls and script imports
+- `sketch.js` - p5.js sketch setup and main loop
+- `simulation.js` - Core simulation logic and state management
+- `ui.js` - User interface controls and interactions
+- `style.css` - Styling for the application
 
 ## Setup
 
 1. Clone this repository
 2. Open `index.html` in your web browser
-3. Start developing by editing `sketch.js`
-
-## Features
-
-- Basic p5.js setup
-- Responsive canvas that adjusts to window size
-- Clean, minimal styling
-
-## Development
-
-The main simulation code should be added to `sketch.js`. The `setup()` function runs once when the program starts, and `draw()` runs continuously to create animation.
+3. Click the "Start Simulation" button to begin
 
 ## Dependencies
 
-- p5.js (loaded via CDN) 
+- p5.js (v1.9.0) - Loaded via CDN
+- Modern web browser with JavaScript enabled 
