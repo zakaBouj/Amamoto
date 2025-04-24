@@ -9,7 +9,7 @@ const Render = {
     onSetup: function() {
         background(180);
         
-        this.drawRect(0, 0, Simulation.simSize, {r: 120, g: 200, b: 180});
+        this.drawRect({x: 0, y: 0}, Simulation.simSize, {r: 120, g: 200, b: 180});
 
         for (let i = 0; i < Simulation.roads.length; i++) {
             this.drawRoad(Simulation.roads[i]);
@@ -29,62 +29,61 @@ const Render = {
         noStroke();
         fill(120, 200, 180);
         if (road.shape === 'straight') {
-            this.drawLine(road.start, road.end, {r: 100, g: 100, b: 100}, 2);
+            this.drawLine(road.start, road.end, {r: 100, g: 100, b: 100}, 10);
         } else {
-            this.drawLine(road.start, road.end, {r: 255, g: 0, b: 0}, 2);
+            this.drawLine(road.start, road.end, {r: 255, g: 0, b: 0}, 10);
         }
     },
 
-    localToGlobal: function(position) {
-        // Validate inputs
-        if (!position || typeof position.x !== 'number' || typeof position.y !== 'number') {
-            console.error('Invalid position object passed to localToGlobal:', position);
-            return { x: 0, y: 0 };
-        }
+    drawLine: function(start, end, color = {r: 255, g: 255, b: 255}, width = 1) {
+        stroke(color.r, color.g, color.b);
+        strokeWeight(width * this.renderScale);
+        start = this.toGlobalScaled(start);
+        end = this.toGlobalScaled(end);
+        line(start.x, start.y, end.x, end.y);
+    },
 
-        if (typeof width !== 'number' || typeof height !== 'number') {
-            console.error('Canvas dimensions not properly initialized');
-            return { x: 0, y: 0 };
-        }
+    drawRect: function(position, size, color = {r: 255, g: 255, b: 255}, borderWidth = 1, borderColor = {r: 0, g: 0, b: 0}) {
+        position = this.toGlobalScaled(position);
+        size = this.scaled(size);
+        fill(color.r, color.g, color.b);
+        stroke(borderColor.r, borderColor.g, borderColor.b);
+        strokeWeight(borderWidth * this.renderScale);
+        rect(position.x, position.y, size.x, size.y);
+    },
 
+    scaled: function(position) {
+        return {
+            x: position.x * this.renderScale,
+            y: position.y * this.renderScale
+        };
+    },
+
+    toGlobal: function(position) {
         const offset = {
             x: (width - Simulation.simSize.x) / 2,
             y: (height - Simulation.simSize.y) / 2
         };
 
         const globalPosition = {
-            x: (position.x + offset.x) * this.renderScale,
-            y: (position.y + offset.y) * this.renderScale   
-        }
-
-        // Validate output
-        if (isNaN(globalPosition.x) || isNaN(globalPosition.y)) {
-            console.error('NaN detected in localToGlobal calculation:', {
-                position,
-                width,
-                height,
-                renderScale: this.renderScale,
-                offset,
-                globalPosition
-            });
-            return { x: 0, y: 0 };
-        }
+            x: position.x + offset.x,
+            y: position.y + offset.y
+        };
 
         return globalPosition;
     },
 
-    drawLine: function(start, end, color = {r: 255, g: 255, b: 255}, width = 1) {
-        stroke(color.r, color.g, color.b);
-        strokeWeight(width * this.renderScale);
-        const scaledStart = this.localToGlobal(start);
-        const scaledEnd = this.localToGlobal(end);
-        line(scaledStart.x, scaledStart.y, scaledEnd.x, scaledEnd.y);
-    },
+    toGlobalScaled: function(position) {
+        const offset = {
+            x: (width - Simulation.simSize.x * this.renderScale) / 2,
+            y: (height - Simulation.simSize.y * this.renderScale) / 2
+        };
 
-    drawRect: function(position, size, color = {r: 255, g: 255, b: 255}) {
-        const scaledPosition = this.localToGlobal(position);
-        const scaledSize = this.localToGlobal(size);
-        fill(color.r, color.g, color.b);
-        rect(scaledPosition.x, scaledPosition.y, scaledSize.x, scaledSize.y);
-    }
+        const globalPosition = {
+            x: position.x * this.renderScale + offset.x,
+            y: position.y * this.renderScale + offset.y
+        };
+
+        return globalPosition;
+    },
 }
