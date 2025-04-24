@@ -1,19 +1,15 @@
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    
-    // Initialize UI and Simulation
-    UI.setup();
-    Simulation.setup();
-}
 
-function initalDraw() {
-    background(180);
+    UI.setup();
+    Render.onSetup();
 }
 
 function draw() {
-    Simulation.update();
+    Render.onUpdate();
 }
 
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
+    Render.onResize();
 } 
