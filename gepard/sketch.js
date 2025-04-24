@@ -1,7 +1,8 @@
 function setup() {
     createCanvas(windowWidth, windowHeight);
 
-    UI.setup();
+    UI.onSetup();
+    Simulation.onSetup();
     Render.onSetup();
 }
 
@@ -12,4 +13,13 @@ function draw() {
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
     Render.onResize();
+}
+
+function mouseWheel(event) {
+    // Prevent default scrolling
+    event.preventDefault();
+    
+    UI.onMouseWheel(event);
+    
+    return false;
 } 
