@@ -1,6 +1,9 @@
 const Render = {
     renderScale: 1,
 
+    roadWidth: 10,
+    carWidth: 7,
+
     setRenderScale: function(scale) {
         this.renderScale = scale;
         this.onResize();
@@ -13,6 +16,10 @@ const Render = {
 
         for (let i = 0; i < Simulation.roads.length; i++) {
             this.drawRoad(Simulation.roads[i]);
+        }
+
+        for (let i = 0; i < Simulation.cars.length; i++) {
+            this.drawCar(Simulation.cars[i]);
         }
     },
 
@@ -29,10 +36,19 @@ const Render = {
         noStroke();
         fill(120, 200, 180);
         if (road.shape === 'straight') {
-            this.drawLine(road.start, road.end, {r: 100, g: 100, b: 100}, 10);
+            this.drawLine(road.start, road.end, {r: 100, g: 100, b: 100}, this.roadWidth);
         } else {
-            this.drawLine(road.start, road.end, {r: 255, g: 0, b: 0}, 10);
+            this.drawLine(road.start, road.end, {r: 255, g: 0, b: 0}, this.roadWidth);
         }
+    },
+
+    drawCar: function(car) {
+        const start = {
+            x: car.position.x - car.size * Math.cos(car.orientation),
+            y: car.position.y - car.size * Math.sin(car.orientation),
+        };
+        
+        this.drawLine(start, car.position, car.color, this.carWidth);
     },
 
     drawLine: function(start, end, color = {r: 255, g: 255, b: 255}, width = 1) {
