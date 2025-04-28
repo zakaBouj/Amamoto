@@ -35,8 +35,14 @@ const Render = {
     drawRoad: function(road) {
         noStroke();
         fill(120, 200, 180);
+
+        const roadColor = {r: 100, g: 100, b: 100};
+
         if (road.shape === 'straight') {
-            this.drawLine(road.start, road.end, {r: 100, g: 100, b: 100}, this.roadWidth);
+            this.drawLine(road.start, road.end, roadColor, this.roadWidth);
+        } else if (road.shape === 'circle') {
+            console.log(road);
+            this.drawCircle(road.center, road.radius, road.arcAngle, road.angleOffset, {r: 255, g: 255, b: 0}, this.roadWidth);
         } else {
             this.drawLine(road.start, road.end, {r: 255, g: 0, b: 0}, this.roadWidth);
         }
@@ -57,6 +63,19 @@ const Render = {
         start = this.toGlobalScaled(start);
         end = this.toGlobalScaled(end);
         line(start.x, start.y, end.x, end.y);
+    },
+
+    drawCircle: function(center, radius, arcAngle, angleOffset, color = {r: 255, g: 255, b: 255}, width = 1) {
+        center = this.toGlobalScaled(center);
+        radius = radius * this.renderScale;
+        arcAngle = arcAngle;
+        noFill();
+        stroke(color.r, color.g, color.b);
+        strokeWeight(width * this.renderScale);
+        arc(center.x, center.y, radius, radius, angleOffset, angleOffset + arcAngle);
+
+        stroke(0, 255, 0);
+        point(center.x, center.y);
     },
 
     drawRect: function(position, size, color = {r: 255, g: 255, b: 255}, borderWidth = 1, borderColor = {r: 0, g: 0, b: 0}) {
