@@ -72,7 +72,7 @@ const Render = {
         noFill();
         stroke(color.r, color.g, color.b);
         strokeWeight(width * this.renderScale);
-        arc(center.x, center.y, radius, radius, angleOffset, angleOffset + arcAngle);
+        arc(center.x, center.y, radius * 2, radius * 2, angleOffset, angleOffset + arcAngle);
 
         stroke(0, 255, 0);
         point(center.x, center.y);

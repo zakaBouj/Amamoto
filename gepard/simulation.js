@@ -12,15 +12,15 @@ const Simulation = {
         this.addNode(400, 400);
         this.addNode(100, 400);
 
-        this.addRoad(this.nodes[0], this.nodes[1])
-        this.addRoad(this.nodes[1], this.nodes[2])
-        this.addRoad(this.nodes[2], this.nodes[3])
-        this.addRoad(this.nodes[3], this.nodes[0])
+        this.addRoad(this.nodes[0], this.nodes[1]);
+        this.addRoad(this.nodes[1], this.nodes[2]);
+        this.addRoad(this.nodes[2], this.nodes[3]);
+        this.addRoad(this.nodes[3], this.nodes[0]);
 
-        this.addCircleRoad(this.nodes[0], this.nodes[1], Math.PI)
-        // this.addCircleRoad(this.nodes[1], this.nodes[2])
-        // this.addCircleRoad(this.nodes[2], this.nodes[3])
-        // this.addCircleRoad(this.nodes[3], this.nodes[0])
+        this.addCircleRoad(this.nodes[0], this.nodes[1]);
+        // this.addCircleRoad(this.nodes[1], this.nodes[2]);
+        // this.addCircleRoad(this.nodes[2], this.nodes[3]);
+        // this.addCircleRoad(this.nodes[3], this.nodes[0]);
 
         this.addCar(0)
     },
@@ -42,8 +42,8 @@ const Simulation = {
         if (arcAngle > Math.PI) {
             arcAngle = Math.PI;
             console.log('arcAngle is greater than PI, setting to PI');
-        } else if (arcAngle < Math.PI * 0.1) {
-            arcAngle = Math.PI * 0.1;
+        } else if (arcAngle < Math.PI * 0.01) {
+            arcAngle = Math.PI * 0.01;
             console.log('arcAngle is less than PI * 0.1, setting to PI * 0.1');
         }
         
@@ -51,19 +51,23 @@ const Simulation = {
         const dy = endNode.y - startNode.y;
 
         const d = Math.sqrt(dx * dx + dy * dy);
-        const h = d / 2 * Math.tan(arcAngle / 2);
+        const h = d / (2 * Math.tan(arcAngle / 2));
 
-        const gamma = atan(dx/dy);
+        let sign = 1;
+        if (dx === 0 && dy < 0) {
+            sign = -1
+        }
+
+        const gamma = Math.acos(dx/d) * sign;
 
         const center = {
-            x: startNode.x + dx / 2 + h * Math.sin(gamma),
-            y: startNode.y + dy / 2 + h * Math.cos(gamma)
+            x: startNode.x + dx / 2 - dy/d * h,
+            y: startNode.y + dy / 2 + dx/d * h
         };
 
-        //const radius = Math.sqrt(1/4 * (dx * dx + dy * dy) + h * h);
-        const radius = d / 2 * Math.cos((Math.PI - arcAngle) / 2);
+        const radius = d / (2 * Math.cos(Math.PI/2 - arcAngle/2));
 
-        const angleOffset = 0;//Math.atan((dy / dx));
+        const angleOffset = gamma - (arcAngle + Math.PI) / 2; //- (Math.PI / 2 - arcAngle);
 
         const road = {
             start: startNode,
