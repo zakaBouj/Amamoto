@@ -12,17 +12,27 @@ const Simulation = {
         this.addNode(400, 400);
         this.addNode(100, 400);
 
-        this.addRoad(this.nodes[0], this.nodes[1]);
-        this.addRoad(this.nodes[1], this.nodes[2]);
-        this.addRoad(this.nodes[2], this.nodes[3]);
-        this.addRoad(this.nodes[3], this.nodes[0]);
+        this.addNode(0, 0);
+        this.addNode(500, 0);
+        this.addNode(500, 500);
+        this.addNode(0, 500);
+
+        // this.addRoad(this.nodes[0], this.nodes[1]);
+        // this.addRoad(this.nodes[1], this.nodes[2]);
+        // this.addRoad(this.nodes[2], this.nodes[3]);
+        // this.addRoad(this.nodes[3], this.nodes[0]);
+
+        this.addRoad(this.nodes[0], this.nodes[4]);
+        this.addRoad(this.nodes[1], this.nodes[5]);
+        this.addRoad(this.nodes[2], this.nodes[6]);
+        this.addRoad(this.nodes[3], this.nodes[7]);
 
         this.addCircleRoad(this.nodes[0], this.nodes[1]);
-        // this.addCircleRoad(this.nodes[1], this.nodes[2]);
-        // this.addCircleRoad(this.nodes[2], this.nodes[3]);
-        // this.addCircleRoad(this.nodes[3], this.nodes[0]);
+        this.addCircleRoad(this.nodes[1], this.nodes[2]);
+        this.addCircleRoad(this.nodes[2], this.nodes[3]);
+        this.addCircleRoad(this.nodes[3], this.nodes[0]);
 
-        this.addCar(0)
+        this.addCar(4)
     },
 
     addNode: function(x, y) {
@@ -30,9 +40,13 @@ const Simulation = {
     },
 
     addRoad: function(startNode, endNode) {
+        const dx = endNode.x - startNode.x;
+        const dy = endNode.y - startNode.y;
+        const orientation = Math.atan(dy / dx);
         const road = {
             start: startNode,
             end: endNode,
+            orientation: orientation,
             shape: 'straight'
         };
         
@@ -53,13 +67,6 @@ const Simulation = {
         const d = Math.sqrt(dx * dx + dy * dy);
         const h = d / (2 * Math.tan(arcAngle / 2));
 
-        let sign = 1;
-        if (dx === 0 && dy < 0) {
-            sign = -1
-        }
-
-        const gamma = Math.acos(dx/d) * sign;
-
         const center = {
             x: startNode.x + dx / 2 - dy/d * h,
             y: startNode.y + dy / 2 + dx/d * h
@@ -67,7 +74,12 @@ const Simulation = {
 
         const radius = d / (2 * Math.cos(Math.PI/2 - arcAngle/2));
 
-        const angleOffset = gamma - (arcAngle + Math.PI) / 2; //- (Math.PI / 2 - arcAngle);
+        let sign = 1;
+        if (dx === 0 && dy < 0) {
+            sign = -1
+        }
+        const angleStartToEnd = Math.acos(dx/d) * sign;
+        const angleOffset = angleStartToEnd - (arcAngle + Math.PI) / 2;
 
         const road = {
             start: startNode,
@@ -81,7 +93,7 @@ const Simulation = {
         this.roads.push(road);
     },
 
-    addCar: function(roadIndex = 0, size = 10, orientation = 0, color = {r: 0, g: 100, b: 255}) {
+    addCar: function(roadIndex = 0, size = 10, color = {r: 50, g: 50, b: 255}) {
         if (roadIndex >= this.roads.length) {
             console.log('roadIndex is greater than the number of roads, setting to 0');
             roadIndex = 0;
@@ -91,23 +103,25 @@ const Simulation = {
         }
 
         const road = this.roads[roadIndex];
+        const position = {x: road.start.x, y: road.start.y};
 
         const car = {
-            position: {x: road.start.x, y: road.start.y},
+            position: position,
             size: size,
-            orientation: 0,
+            orientation: this._getOrientation(road, position),
             color: color,
         };
         this.cars.push(car);
     },
 
-    // _getOrientation: function(road, position) {
-    //     if (road.shape === 'straight') {
-    //         return Math.atan2(road.end.y - road.start.y, road.end.x - road.start.x);
-    //     } else if (road.shape === 'circle') {
-            
-    //     } else {
-    //         return Math.atan2(road.end.y - road.start.y, road.end.x - road.start.x);
-    //     }
-    // }
+    _getOrientation: function(road, position) {
+        if (road.shape === 'straight') {
+            return road.orientation;
+        } else if (road.shape === 'circle') {
+            return 0;
+        } else {
+            console.log("undefined road shape");
+            return 0;
+        }
+    }
 }

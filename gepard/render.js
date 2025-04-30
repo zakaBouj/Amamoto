@@ -41,8 +41,7 @@ const Render = {
         if (road.shape === 'straight') {
             this.drawLine(road.start, road.end, roadColor, this.roadWidth);
         } else if (road.shape === 'circle') {
-            console.log(road);
-            this.drawCircle(road.center, road.radius, road.arcAngle, road.angleOffset, {r: 255, g: 255, b: 0}, this.roadWidth);
+            this.drawCircle(road.center, road.radius, road.arcAngle, road.angleOffset, roadColor, this.roadWidth);
         } else {
             this.drawLine(road.start, road.end, {r: 255, g: 0, b: 0}, this.roadWidth);
         }
