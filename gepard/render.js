@@ -18,6 +18,10 @@ const Render = {
             this.drawRoad(Simulation.roads[i]);
         }
 
+        for (let i = 0; i < Simulation.nodes.length; i++) {
+            this.drawNode(Simulation.nodes[i]);
+        }
+
         for (let i = 0; i < Simulation.cars.length; i++) {
             this.drawCar(Simulation.cars[i]);
         }
@@ -47,6 +51,10 @@ const Render = {
         }
     },
 
+    drawNode: function(node) {
+        this.drawPoint(node, {r: 0, g: 255, b: 250}, this.roadWidth / 2);
+    },
+
     drawCar: function(car) {
         const start = {
             x: car.position.x - car.size * Math.cos(car.orientation),
@@ -54,6 +62,14 @@ const Render = {
         };
         
         this.drawLine(start, car.position, car.color, this.carWidth);
+        this.drawPoint(car.position, {r: 255, g:0, b:0}, this.carWidth / 2);
+    },
+
+    drawPoint: function(position, color = {r: 255, g: 255, b:  255}, width = 1) {
+        stroke(color.r, color.g, color.b);
+        strokeWeight(width * this.renderScale);
+        position = this.toGlobalScaled(position);
+        point(position.x, position.y);
     },
 
     drawLine: function(start, end, color = {r: 255, g: 255, b: 255}, width = 1) {
@@ -73,8 +89,8 @@ const Render = {
         strokeWeight(width * this.renderScale);
         arc(center.x, center.y, radius * 2, radius * 2, angleOffset, angleOffset + arcAngle);
 
-        stroke(0, 255, 0);
-        point(center.x, center.y);
+        // stroke(0, 255, 0);
+        // point(center.x, center.y);
     },
 
     drawRect: function(position, size, color = {r: 255, g: 255, b: 255}, borderWidth = 1, borderColor = {r: 0, g: 0, b: 0}) {

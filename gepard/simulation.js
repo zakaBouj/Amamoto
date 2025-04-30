@@ -33,6 +33,9 @@ const Simulation = {
         this.addCircleRoad(this.nodes[3], this.nodes[0]);
 
         this.addCar(4)
+        this.addCar(5)
+        this.addCar(6)
+        this.addCar(7)
     },
 
     addNode: function(x, y) {
@@ -118,7 +121,13 @@ const Simulation = {
         if (road.shape === 'straight') {
             return road.orientation;
         } else if (road.shape === 'circle') {
-            return 0;
+            const dx = position.x - road.center.x
+            const dy = position.y - road.center.y
+            let sign = 1;
+            if (dx < 0) {
+                sign = -1;
+            }
+            return Math.atan(dy/dx) + sign * Math.PI / 2;
         } else {
             console.log("undefined road shape");
             return 0;
