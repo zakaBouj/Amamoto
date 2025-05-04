@@ -12,30 +12,41 @@ const Simulation = {
         this.addNode(400, 400);
         this.addNode(100, 400);
 
-        this.addNode(0, 0);
-        this.addNode(500, 0);
-        this.addNode(500, 500);
-        this.addNode(0, 500);
+        // this.addNode(0, 0);
+        // this.addNode(500, 0);
+        // this.addNode(500, 500);
+        // this.addNode(0, 500);
 
-        // this.addRoad(this.nodes[0], this.nodes[1]);
-        // this.addRoad(this.nodes[1], this.nodes[2]);
-        // this.addRoad(this.nodes[2], this.nodes[3]);
-        // this.addRoad(this.nodes[3], this.nodes[0]);
+        // this.addRoad(this.nodes[0], this.nodes[4]);
+        // this.addRoad(this.nodes[1], this.nodes[5]);
+        // this.addRoad(this.nodes[2], this.nodes[6]);
+        // this.addRoad(this.nodes[3], this.nodes[7]);
 
-        this.addRoad(this.nodes[0], this.nodes[4]);
-        this.addRoad(this.nodes[1], this.nodes[5]);
-        this.addRoad(this.nodes[2], this.nodes[6]);
-        this.addRoad(this.nodes[3], this.nodes[7]);
+        // this.addCircleRoad(this.nodes[0], this.nodes[1]);
+        // this.addCircleRoad(this.nodes[1], this.nodes[2]);
+        // this.addCircleRoad(this.nodes[2], this.nodes[3]);
+        // this.addCircleRoad(this.nodes[3], this.nodes[0]);
 
-        this.addCircleRoad(this.nodes[0], this.nodes[1]);
-        this.addCircleRoad(this.nodes[1], this.nodes[2]);
-        this.addCircleRoad(this.nodes[2], this.nodes[3]);
-        this.addCircleRoad(this.nodes[3], this.nodes[0]);
+        this.addRoad(this.nodes[0], this.nodes[1]);
+        this.addRoad(this.nodes[1], this.nodes[2]);
+        this.addRoad(this.nodes[2], this.nodes[3]);
+        this.addRoad(this.nodes[3], this.nodes[0]);
 
-        this.addCar(4)
-        this.addCar(5)
-        this.addCar(6)
-        this.addCar(7)
+        this.addCar(0)
+        // this.addCar(5)
+        // this.addCar(6)
+        // this.addCar(7)
+    },
+
+    onUpdate: function() {
+        for (let i = 0; i < this.cars.length; i++) {
+            this.move(this.cars[i]);
+        }
+    },
+
+    move: function(car, speed = 5) {
+        car.position.x += Math.cos(car.orientation) * speed;
+        car.position.y += Math.sin(car.orientation) * speed;
     },
 
     addNode: function(x, y) {
@@ -49,15 +60,15 @@ const Simulation = {
         const road = {
             start: startNode,
             end: endNode,
+            shape: 'straight',
             orientation: orientation,
-            shape: 'straight'
         };
         
         this.roads.push(road);
     },
     addCircleRoad: function(startNode, endNode, arcAngle = Math.PI * 0.5) {
-        if (arcAngle > Math.PI) {
-            arcAngle = Math.PI;
+        if (arcAngle > Math.PI * 1.99) {
+            arcAngle = Math.PI * 1.99;
             console.log('arcAngle is greater than PI, setting to PI');
         } else if (arcAngle < Math.PI * 0.01) {
             arcAngle = Math.PI * 0.01;

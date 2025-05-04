@@ -10,6 +10,15 @@ const Render = {
     },
 
     onSetup: function() {
+        
+    },
+
+    onResize: function() {
+        this.onSetup();
+        this.onUpdate();
+    },
+
+    onUpdate: function() {
         background(180);
         
         this.drawRect({x: 0, y: 0}, Simulation.simSize, {r: 120, g: 200, b: 180});
@@ -27,19 +36,7 @@ const Render = {
         }
     },
 
-    onResize: function() {
-        this.onSetup();
-        this.onUpdate();
-    },
-
-    onUpdate: function() {
-        
-    },
-
     drawRoad: function(road) {
-        noStroke();
-        fill(120, 200, 180);
-
         const roadColor = {r: 100, g: 100, b: 100};
 
         if (road.shape === 'straight') {
@@ -88,9 +85,6 @@ const Render = {
         stroke(color.r, color.g, color.b);
         strokeWeight(width * this.renderScale);
         arc(center.x, center.y, radius * 2, radius * 2, angleOffset, angleOffset + arcAngle);
-
-        // stroke(0, 255, 0);
-        // point(center.x, center.y);
     },
 
     drawRect: function(position, size, color = {r: 255, g: 255, b: 255}, borderWidth = 1, borderColor = {r: 0, g: 0, b: 0}) {

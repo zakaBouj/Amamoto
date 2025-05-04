@@ -7,6 +7,7 @@ function setup() {
 }
 
 function draw() {
+    Simulation.onUpdate();
     Render.onUpdate();
 }
 
@@ -22,4 +23,4 @@ function mouseWheel(event) {
     UI.onMouseWheel(event);
     
     return false;
-} 
+}
