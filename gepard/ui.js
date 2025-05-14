@@ -12,6 +12,11 @@ const UI = {
         document.getElementById('resetScaleButton').addEventListener('click', function() {
             UI.updateRenderScale(1);
         });
+
+        document.getElementById('tickButton').addEventListener('click', function () {
+            Simulation.onUpdate();
+            Render.onUpdate();
+        });
     },
 
     toggleSimulation: function () {

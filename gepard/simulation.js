@@ -7,6 +7,9 @@ const Simulation = {
     cars: [],
 
     onSetup: function() {
+
+        frameRate(60);
+
         this.addNode(100, 100);
         this.addNode(400, 100);
         this.addNode(400, 400);
@@ -27,7 +30,7 @@ const Simulation = {
         // this.addCircleRoad(this.nodes[2], this.nodes[3]);
         // this.addCircleRoad(this.nodes[3], this.nodes[0]);
 
-        this.addRoad(this.nodes[0], this.nodes[1]);
+        this.addCircleRoad(this.nodes[0], this.nodes[1]);
         this.addRoad(this.nodes[1], this.nodes[2]);
         this.addRoad(this.nodes[2], this.nodes[3]);
         this.addRoad(this.nodes[3], this.nodes[0]);
@@ -45,8 +48,30 @@ const Simulation = {
     },
 
     move: function(car, speed = 5) {
-        car.position.x += Math.cos(car.orientation) * speed;
-        car.position.y += Math.sin(car.orientation) * speed;
+        const road = this.roads[car.roadIndex];
+
+        if (road.shape === "straight") {
+            const dx = Math.cos(car.orientation) * speed;
+            const dy = Math.sin(car.orientation) * speed;
+
+            car.position.x += dx;
+            car.position.y += dy;   
+        } else if (road.shape === "circle") {
+            const deltaAngle = speed / road.radius;
+
+            const alpha = car.orientation - Math.PI / 2;
+            const phi = alpha + deltaAngle;
+
+            const newX = road.radius * Math.cos(phi) + road.center.x;
+            const newY = road.radius * Math.sin(phi) + road.center.y;
+
+            car.position.x = newX;
+            car.position.y = newY;
+            
+            car.orientation = this._getOrientation(road, car.position);
+        } else {
+            car.position = {x: 0, y: 0};
+        }
     },
 
     addNode: function(x, y) {
@@ -124,6 +149,7 @@ const Simulation = {
             size: size,
             orientation: this._getOrientation(road, position),
             color: color,
+            roadIndex: roadIndex,
         };
         this.cars.push(car);
     },
